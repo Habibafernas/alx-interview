@@ -1,21 +1,21 @@
 #!/usr/bin/python3
-'''A module for working with Pascal's triangle.
+'''A module for working with lockboxes.
 '''
 
 
-def pascal_triangle(n):
-    '''Creates a list of lists of integers representing
-    the Pascal's triangle of a given integer.
+def canUnlockAll(boxes):
+    '''Checks if all the boxes in a list of boxes containing the keys
+    (indices) to other boxes can be unlocked given that the first
+    box is unlocked.
     '''
-    triangle = []
-    if type(n) is not int or n <= 0:
-        return triangle
-    for i in range(n):
-        line = []
-        for j in range(i + 1):
-            if j == 0 or j == i:
-                line.append(1)
-            elif i > 0 and j > 0:
-                line.append(triangle[i - 1][j - 1] + triangle[i - 1][j])
-        triangle.append(line)
-    return triangle
+    n = len(boxes)
+    seen_boxes = set([0])
+    unseen_boxes = set(boxes[0]).difference(set([0]))
+    while len(unseen_boxes) > 0:
+        boxIdx = unseen_boxes.pop()
+        if not boxIdx or boxIdx >= n or boxIdx < 0:
+            continue
+        if boxIdx not in seen_boxes:
+            unseen_boxes = unseen_boxes.union(boxes[boxIdx])
+            seen_boxes.add(boxIdx)
+    return n == len(seen_boxes)
